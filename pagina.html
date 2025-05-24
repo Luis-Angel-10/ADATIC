@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión - TEC Teziutlán</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="pagina.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="apiController.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <aside class="app-sidebar">
+            <div class="sidebar-header">
+                <img src="logo-tec.png" alt="Logo TEC Teziutlán" class="logo-img">
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="nav-menu">
+                    <li class="nav-item active">
+                        <a href="#inicio" class="nav-link">
+                            <i class="fas fa-home nav-icon"></i>
+                            <span class="nav-text">Inicio</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#actividades" class="nav-link">
+                            <i class="fas fa-tasks nav-icon"></i>
+                            <span class="nav-text">Actividades</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#planeacion" class="nav-link">
+                            <i class="fas fa-calendar-alt nav-icon"></i>
+                            <span class="nav-text">Planeaciones</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#usuarios" class="nav-link">
+                            <i class="fas fa-users nav-icon"></i>
+                            <span class="nav-text">Usuarios</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#reportes" class="nav-link">
+                            <i class="fas fa-file-alt nav-icon"></i>
+                            <span class="nav-text">Reportes</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#otro" class="nav-link">
+                            <i class="fas fa-ellipsis-h nav-icon"></i>
+                            <span class="nav-text">Otros</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <img src="logo-empresa.jpg" alt="" class="footer-logo">
+            </div>
+        </aside>
+
+        <main class="app-main">
+            <header class="app-header">
+                <div class="header-search">
+                    <input type="text" class="search-input" placeholder="Buscar...">
+                    <button class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <div class="header-user">
+                    <div class="user-profile">
+                        <span class="user-name" id="current-user">Usuario</span>
+                        <div class="user-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                    </div>
+                    <button id="logoutBtn" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                    </button>
+                </div>
+            </header>
+
+            <!--Inicio-->
+            <div class="app-content" id="inicio">
+                <section class="welcome-section">
+                    <div class="welcome-header">
+                        <h1 class="welcome-title">Hola, bienvenido</h1>
+                        <p class="user-role">Tipo de usuario: <span id="user-role">Administrador</span></p>
+                    </div>
+                    <div class="welcome-content">
+                        <div class="welcome-message">
+                            <h2 class="welcome-subtitle">Bienvenido al sistema de gestión</h2>
+                            <p class="welcome-description">Sistema integral de administración del Tecnológico de
+                                Teziutlán</p>
+                        </div>
+                        <div class="welcome-logo">
+                            <div class="logo-container">
+                                <img src="logo-tec2.png" alt="Logo TEC" class="institution-logo">
+                                <p class="institution-name">TEC Teziutlán</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="dashboard-section">
+                    <div class="dashboard-cards">
+                        <article class="summary-card">
+                            <div class="card-header">
+                                <i class="fas fa-calendar-day card-icon"></i>
+                                <h3 class="card-title">Actividades próximas</3>
+                            </div>
+                            <div class="card-body" id="upcoming-activities">
+                                <div class="loading-state">
+                                    <i class="fas fa-spinner fa-spin loading-icon"></i>
+                                    <span class="loading-text">Cargando actividades...</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="summary-card">
+                            <div class="card-header">
+                                <i class="fas fa-clock card-icon"></i>
+                                <h3 class="card-title">Fecha y Hora</h3>
+                            </div>
+                            <div class="card-body" id="current-datetime">
+                                <div class="datetime-display">
+                                    <div id="current-date" class="date-display"></div>
+                                    <div id="current-time" class="time-display"></div>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="summary-card">
+                            <div class="card-header">
+                                <i class="fas fa-file-alt card-icon"></i>
+                                <h3 class="card-title">Reportes recientes</h3>
+                            </div>
+                            <div class="card-body" id="recent-reports">
+                                <div class="loading-state">
+                                    <i class="fas fa-spinner fa-spin loading-icon"></i>
+                                    <span class="loading-text">Cargando reportes...</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="data-section">
+                    <div class="section-header">
+                        <h3 class="section-title">Planeaciones recientes</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead class="table-header">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Unidad</th>
+                                    <th>Usuario</th>
+                                    <th>Objetivo Área</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-body" id="planning-data">
+                                <tr class="loading-row">
+                                    <td colspan="5">
+                                        <div class="loading-state">
+                                            <i class="fas fa-spinner fa-spin loading-icon"></i>
+                                            <span class="loading-text">Cargando planeaciones...</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!--Actividades-->
+            <div class="app-content" id="actividades" style="display: none;">
+                <div class="planning-container">
+                    <div class="planning-form">
+                        <div class="section-header">
+                            <h1 class="section-title">Gestión de Actividades</h1>
+                            <button id="create-planning-btn" class="action-btn">
+                                <i class="fas fa-plus"></i> Nueva Actividad
+                            </button>
+                        </div>
+
+                        <div id="planning-form-content" style="display: none;">
+                            <input type="hidden" id="activity-id">
+
+                            <div class="form-group">
+                                <label for="activity-name">Nombre de la Actividad</label>
+                                <input type="text" id="activity-name" class="form-control"
+                                    placeholder="Ingrese el nombre">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="activity-description">Descripción</label>
+                                <textarea id="activity-description" class="form-control" rows="3"
+                                    placeholder="Descripción detallada"></textarea>
+                            </div>
+
+                            <div class="" form-group>
+                                <label for="activitu-annual-count"> Cantidad Anual</label>
+                                <input type="number" id="activity-annual-count" class="form-control" min="1"
+                                    placeholder="Número de veces al año">
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group" style="flex: 1;">
+                                    <label for="activity-date">Fecha</label>
+                                    <input type="date" id="activity-date" class="form-control"
+                                        style="font-size: 0.9em;">
+                                </div>
+                                <div class="form-group" style="flex: 1;">
+                                    <label for="activity-budget">Presupuesto</label>
+                                    <input type="number" id="activity-budget" class="form-control"
+                                        placeholder="Monto presupuestado">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="componente">Componente</label>
+                                    <select id="componente" class="form-control">
+                                        <option value="">Cargando componentes...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="medida">Medida</label>
+                                    <select id="medida" class="form-control">
+                                        <option value="">Cargando medidas...</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="objetivo">Objetivo</label>
+                                    <select id="objetivo" class="form-control">
+                                        <option value="">Cargando objetivos...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="responsable">Responsable</label>
+                                    <select id="responsable" class="form-control">
+                                        <option value="">Cargando responsables...</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="action-buttons">
+                                <button id="save-activity-btn" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Guardar
+                                </button>
+                                <button id="cancel-planning-btn" class="btn btn-secondary">
+                                    <i class="fas fa-times"></i> Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="planning-dashboard">
+                        <div class="dashboard-header">
+                            <h2 class="dashboard-title">Actividades Registradas</h2>
+                            <div class="dashboard-filters">
+                                <select id="filter-unit" class="filter-select">
+                                    <option value="">Filtrar por unidad</option>
+                                    <option value="direccion">Dirección</option>
+                                    <option value="docencia">Subdirección de Docencia</option>
+                                </select>
+                                <select id="filter-status" class="filter-select">
+                                    <option value="">Filtrar por estado</option>
+                                    <option value="Pendiente">Pendiente</option>
+                                    <option value="En progreso">En progreso</option>
+                                    <option value="Completada">Completada</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="activities-list" id="activities-list">
+                            <div class="empty-state">
+                                <i class="fas fa-calendar-alt empty-icon"></i>
+                                <p>No hay actividades registradas</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Planeación-->
+            <div class="app-content" id="planeacion" style="display: none;">
+                <div class="planning-container">
+                    <div class="planning-form">
+                        <div class="section-header">
+                            <h1 class="section-title">Gestión de Planeación</h1>
+                            <button id="create-first-planning" class="action-btn">
+                                <i class="fas fa-plus"></i> Nueva Planeación
+                            </button>
+                        </div>
+
+                        <div id="planning-form-content" style="display: none;">
+                            <input type="hidden" id="planning-id">
+
+                            <div class="form-group">
+                                <label for="planning-responsable">Unidad Responsable</label>
+                                <select id="planning-responsable" class="form-control" required>
+                                    <option value="">Seleccionar unidad responsable</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="jefe-unidad">Jefe de Unidad</label>
+                                <input type="text" id="jefe-unidad" class="form-control"
+                                    placeholder="Ingrese el jefe de unidad">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="medio-verificacion">Medio de Verificación</label>
+                                <input type="text" id="medio-verificacion" class="form-control"
+                                    placeholder="Ingrese el medio de verificación">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="objetivo-area">Objetivo de Área</label>
+                                <input type="text" id="objetivo-area" class="form-control"
+                                    placeholder="Ingrese el objetivo area">
+                            </div>
+
+                            <div class="action-buttons">
+                                <button id="save-planning-btn" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Guardar
+                                </button>
+                                <button id="cancel-plan-btn" class="btn btn-secondary">
+                                    <i class="fas fa-times"></i> Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="planning-dashboard">
+                        <div class="dashboard-header">
+                            <h2 class="dashboard-title">Planeaciones Registradas</h2>
+                            <div class="dashboard-filters">
+                                <select id="filter-planning-unit" class="filter-select">
+                                    <option value="">Filtrar por unidad</option>
+                                    <option value="direccion">Dirección</option>
+                                    <option value="docencia">Subdirección de Docencia</option>
+                                </select>
+                                <select id="filter-planning-status" class="filter-select">
+                                    <option value="">Filtrar por estado</option>
+                                    <option value="activo">Activo</option>
+                                    <option value="inactivo">Inactivo</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="activities-list" id="plannings-list">
+                            <div class="empty-state">
+                                <i class="fas fa-calendar-alt empty-icon"></i>
+                                <p>No hay planeaciones registradas</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Usuarios-->
+            <div class="app-content" id="usuarios" style="display: none;">
+                <section class="data-section">
+                    <div class="section-header">
+                        <h3 class="section-title">Gestión de Usuarios</h3>
+                        <div>
+                            <button class="action-btn" id="add-user">
+                                <i class="fas fa-plus"></i> Nuevo Usuario
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead class="table-header">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Correo</th>
+                                    <th>Responsable</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-body" id="users-data">
+                                <tr class="loading-row">
+                                    <td colspan="6">
+                                        <div class="loading-state">
+                                            <i class="fas fa-spinner fa-spin loading-icon"></i>
+                                            <span class="loading-text">Cargando usuarios...</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Modal para Usuarios -->
+            <div id="user-modal" class="modal">
+                <div class="modal-content" style="max-width: 600px;">
+                    <span class="close-modal">&times;</span>
+                    <h2 id="user-modal-title">Nuevo Usuario</h2>
+                    <div class="form-group">
+                        <label for="user-email">Correo</label>
+                        <input type="email" id="user-email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-password">Contraseña</label>
+                        <div class="password-input-container">
+                            <input type="password" id="user-password" class="form-control" required>
+                            <i class="fas fa-eye toggle-password" id="toggle-password"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-description">Descripción</label>
+                        <textarea id="user-description" class="form-control" rows="3"
+                            placeholder="Descripción del usuario"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-responsable">Responsable</label>
+                        <select id="user-responsable" class="form-control" required>
+                            <option value="">Seleccionar responsable</option>
+                        </select>
+                    </div>
+                    <div class="action-buttons">
+                        <button id="save-user" class="btn btn-primary">Guardar</button>
+                        <button class="btn btn-secondary cancel-modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!--Reportes-->
+            <div class="app-content" id="reportes" style="display: none;">
+                <div class="report-container">
+                    <!-- Formulario para generar nuevos reportes -->
+                    <div class="report-form-container" id="new-report-form">
+                        <div class="report-form">
+                            <h1>Generación de Reportes</h1>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="report-date">Fecha:</label>
+                                    <input type="text" id="report-date" class="form-control" placeholder="dd/mm/aaaa">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="report-quarter">Trimestre:</label>
+                                    <div class="quarter-select">
+                                        <select id="report-quarter" class="form-control">
+                                            <option value="">Seleccionar trimestre</option>
+                                            <option value="1">1er Trimestre (Ene - Mar)</option>
+                                            <option value="2">2do Trimestre (Abr - Jun)</option>
+                                            <option value="3">3er Trimestre (Jul - Sep)</option>
+                                            <option value="4">4to Trimestre (Oct - Dic)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Actividades realizadas</label>
+                                <table class="activity-table">
+                                    <thead>
+                                        <tr>
+                                            <th>No. Actividad</th>
+                                            <th>Nombre de Actividad</th>
+                                            <th>Reportante</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="activities-body">
+                                        <tr>
+                                            <td><input type="text" class="form-control activity-number"
+                                                    placeholder="Número"></td>
+                                            <td><input type="text" class="form-control activity-name"
+                                                    placeholder="Nombre de actividad"></td>
+                                            <td><input type="text" class="form-control activity-reporter"
+                                                    placeholder="Nombre de quien reporta"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Informe de Actividades</label>
+                                <textarea id="report-activity-description" class="form-control" rows="6"
+                                    placeholder="Descripción detallada de las actividades realizadas..."></textarea>
+                            </div>
+
+                            <div class="form-group photo-evidence">
+                                <label>Evidencia Fotográfica (4 imágenes requeridas)</label>
+                                <div class="file-upload-container">
+                                    <input type="file" id="photo-upload" accept="image/*" multiple>
+                                    <label for="photo-upload" class="file-upload-label">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <span>Seleccionar imágenes (4)</span>
+                                    </label>
+                                    <div id="file-names" class="file-names">Sin archivos seleccionados</div>
+                                </div>
+                                <div id="image-preview" class="image-preview-container"></div>
+                            </div>
+
+                            <div class="action-buttons">
+                                <button id="preview-btn" class="btn btn-preview">
+                                    <i class="fas fa-eye"></i> Vista previa
+                                </button>
+                                <button id="export-btn" class="btn btn-export">
+                                    <i class="fas fa-file-pdf"></i> Exportar PDF
+                                </button>
+                                <button id="cancel-report-btn" class="btn btn-cancel">
+                                    <i class="fas fa-times"></i> Cancelar
+                                </button>
+                                <button id="view-reports-btn" class="btn btn-secondary">
+                                    <i class="fas fa-list"></i> Ver reportes
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="pdf-preview-modal" class="modal">
+                            <div class="modal-content">
+                                <span class="close-modal">&times;</span>
+                                <h2>Vista previa del Reporte</h2>
+                                <div id="pdf-preview-content" class="pdf-preview-content"></div>
+                                <button id="download-from-preview" class="btn btn-export">
+                                    <i class="fas fa-download"></i> Descargar PDF
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reports-list-container" id="reports-list-container" style="display: none;">
+                        <div class="section-header">
+                            <h2 class="section-title">Reportes Existentes</h2>
+                            <button id="back-to-new-report" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Volver a generador
+                            </button>
+                        </div>
+
+                        <div class="search-reports">
+                            <input type="text" id="search-reports-input" class="form-control"
+                                placeholder="Buscar reportes...">
+                            <button id="search-reports-btn" class="btn btn-primary">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+
+                        <div class="reports-grid" id="reports-grid">
+                            <div class="loading-state">
+                                <i class="fas fa-spinner fa-spin loading-icon"></i>
+                                <span class="loading-text">Cargando reportes...</span>
+                            </div>
+                        </div>
+
+                        <div id="report-detail-modal" class="modal">
+                            <div class="modal-content" style="max-width: 800px;">
+                                <span class="close-modal">&times;</span>
+                                <h2 id="report-detail-title">Detalles del Reporte</h2>
+                                <div class="report-detail-meta">
+                                    <span id="report-detail-date"></span>
+                                    <span id="report-detail-quarter"></span>
+                                </div>
+
+                                <div class="report-detail-section">
+                                    <h3>Actividades</h3>
+                                    <table class="report-detail-activities" id="report-detail-activities">
+                                        <thead>
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>Actividad</th>
+                                                <th>Reportante</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+
+                                <div class="report-detail-section">
+                                    <h3>Descripción</h3>
+                                    <div id="report-detail-description" class="report-detail-description"></div>
+                                </div>
+
+                                <div class="report-detail-section">
+                                    <h3>Evidencias</h3>
+                                    <div id="report-detail-evidence" class="report-detail-evidence"></div>
+                                </div>
+
+                                <div class="report-detail-actions">
+                                    <button id="download-report-detail" class="btn btn-primary">
+                                        <i class="fas fa-download"></i> Descargar PDF
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Otro -->
+            <div class="app-content" id="otro" style="display: none;">
+                <div class="dashboard-container">
+                    <div class="dashboard-tabs">
+                        <button class="tab-btn active" data-tab="componentes">Componentes</button>
+                        <button class="tab-btn" data-tab="medidas">Medidas</button>
+                        <button class="tab-btn" data-tab="responsables">Responsables</button>
+                        <button class="tab-btn" data-tab="objetivos">Objetivos</button>
+                        <button class="tab-btn" data-tab="roles">Roles</button>
+                    </div>
+
+                    <!-- Tabla de Componentes -->
+                    <div class="tab-content active" id="componentes-tab">
+                        <div class="crud-header">
+                            <h2>Componentes</h2>
+                            <button class="action-btn" id="add-componente">
+                                <i class="fas fa-plus"></i> Agregar
+                            </button>
+                        </div>
+                        <div class="table-container">
+                            <div class="table-responsive">
+                                <table class="crud-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="10%">ID</th>
+                                            <th width="15%">Número</th>
+                                            <th>Descripción</th>
+                                            <th width="15%">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="componente-data">
+                                        <tr>
+                                            <td colspan="4" class="loading-row">
+                                                <div class="loading-state">
+                                                    <i class="fas fa-spinner fa-spin"></i>
+                                                    <span>Cargando componentes...</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabla de Medidas -->
+                    <div class="tab-content" id="medidas-tab">
+                        <div class="crud-header">
+                            <h2>Medidas</h2>
+                            <button class="action-btn" id="add-medida">
+                                <i class="fas fa-plus"></i> Agregar
+                            </button>
+                        </div>
+                        <div class="table-container">
+                            <div class="table-responsive">
+                                <table class="crud-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="15%">ID</th>
+                                            <th>Descripción</th>
+                                            <th width="20%">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="medida-data">
+                                        <tr>
+                                            <td colspan="3" class="loading-row">
+                                                <div class="loading-state">
+                                                    <i class="fas fa-spinner fa-spin"></i>
+                                                    <span>Cargando medidas...</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabla de Responsables -->
+                    <div class="tab-content" id="responsables-tab">
+                        <div class="crud-header">
+                            <h2>Responsables</h2>
+                            <button class="action-btn" id="add-responsable">
+                                <i class="fas fa-plus"></i> Agregar
+                            </button>
+                        </div>
+                        <div class="table-container">
+                            <div class="table-responsive">
+                                <table class="crud-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="15%">ID</th>
+                                            <th>Nombre</th>
+                                            <th width="20%">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="responsable-data">
+                                        <tr>
+                                            <td colspan="3" class="loading-row">
+                                                <div class="loading-state">
+                                                    <i class="fas fa-spinner fa-spin"></i>
+                                                    <span>Cargando responsables...</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabla de Objetivos -->
+                    <div class="tab-content" id="objetivos-tab">
+                        <div class="crud-header">
+                            <h2>Objetivos</h2>
+                            <button class="action-btn" id="add-objetivo">
+                                <i class="fas fa-plus"></i> Agregar
+                            </button>
+                        </div>
+                        <div class="table-container">
+                            <div class="table-responsive">
+                                <table class="crud-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="10%">ID</th>
+                                            <th width="25%">Nombre</th>
+                                            <th>Descripción</th>
+                                            <th width="15%">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="objetivo-data">
+                                        <tr>
+                                            <td colspan="4" class="loading-row">
+                                                <div class="loading-state">
+                                                    <i class="fas fa-spinner fa-spin"></i>
+                                                    <span>Cargando objetivos...</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabla de Roles -->
+                    <div class="tab-content" id="roles-tab">
+                        <div class="crud-header">
+                            <h2>Roles</h2>
+                            <button class="action-btn" id="add-rol">
+                                <i class="fas fa-plus"></i> Agregar
+                            </button>
+                        </div>
+                        <div class="table-container">
+                            <div class="table-responsive">
+                                <table class="crud-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="10%">ID</th>
+                                            <th width="20%">Nombre</th>
+                                            <th>Descripción</th>
+                                            <th width="20%">Permisos</th>
+                                            <th width="15%">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="rol-data">
+                                        <tr>
+                                            <td colspan="5" class="loading-row">
+                                                <div class="loading-state">
+                                                    <i class="fas fa-spinner fa-spin"></i>
+                                                    <span>Cargando roles...</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal para Componentes -->
+                <div id="componente-modal" class="modal">
+                    <div class="modal-content" style="max-width: 500px;">
+                        <span class="close-modal">&times;</span>
+                        <h2 id="componente-modal-title">Nuevo Componente</h2>
+                        <div class="form-group">
+                            <label for="componente-numero">Número</label>
+                            <input type="text" id="componente-numero" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="componente-descripcion">Descripción</label>
+                            <input type="text" id="componente-descripcion" class="form-control" required>
+                        </div>
+                        <div class="action-buttons">
+                            <button id="save-componente" class="btn btn-primary">Guardar</button>
+                            <button class="btn btn-secondary cancel-modal">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal para Medidas -->
+                <div id="medida-modal" class="modal">
+                    <div class="modal-content" style="max-width: 500px;">
+                        <span class="close-modal">&times;</span>
+                        <h2 id="medida-modal-title">Nueva Medida</h2>
+                        <div class="form-group">
+                            <label for="medida-descripcion">Descripción</label>
+                            <input type="text" id="medida-descripcion" class="form-control" required>
+                        </div>
+                        <div class="action-buttons">
+                            <button id="save-medida" class="btn btn-primary">Guardar</button>
+                            <button class="btn btn-secondary cancel-modal">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal para Responsables -->
+                <div id="responsable-modal" class="modal">
+                    <div class="modal-content" style="max-width: 500px;">
+                        <span class="close-modal">&times;</span>
+                        <h2 id="responsable-modal-title">Nuevo Responsable</h2>
+                        <div class="form-group">
+                            <label for="responsable-nombre">Nombre</label>
+                            <input type="text" id="responsable-nombre" class="form-control" required>
+                        </div>
+                        <div class="action-buttons">
+                            <button id="save-responsable" class="btn btn-primary">Guardar</button>
+                            <button class="btn btn-secondary cancel-modal">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal para Objetivos -->
+                <div id="objetivo-modal" class="modal">
+                    <div class="modal-content" style="max-width: 600px;">
+                        <span class="close-modal">&times;</span>
+                        <h2 id="objetivo-modal-title">Nuevo Objetivo</h2>
+                        <div class="form-group">
+                            <label for="objetivo-nombre">Nombre</label>
+                            <input type="text" id="objetivo-nombre" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="objetivo-descripcion">Descripción</label>
+                            <textarea id="objetivo-descripcion" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="action-buttons">
+                            <button id="save-objetivo" class="btn btn-primary">Guardar</button>
+                            <button class="btn btn-secondary cancel-modal">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal para Roles -->
+                <div id="rol-modal" class="modal">
+                    <div class="modal-content" style="max-width: 600px;">
+                        <span class="close-modal">&times;</span>
+                        <h2 id="rol-modal-title">Nuevo Rol</h2>
+                        <div class="form-group">
+                            <label for="rol-nombre">Nombre</label>
+                            <input type="text" id="rol-nombre" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="rol-descripcion">Descripción</label>
+                            <textarea id="rol-descripcion" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="rol-permisos">Permisos</label>
+                            <select id="rol-permisos" class="form-control" multiple required>
+                                <option value="read">Visualizador</option>
+                                <option value="write">Operador Basico</option>
+                                <option value="delete">Operador Avanzado</option>
+                                <option value="admin">Administrador</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="rol-responsable">Responsable*</label>
+                            <select id="rol-responsable" class="form-control" required>
+                                <option value="">Seleccionar responsable</option>
+                            </select>
+                        </div>
+                        <div class="action-buttons">
+                            <button id="save-rol" class="btn btn-primary">Guardar</button>
+                            <button class="btn btn-secondary cancel-modal">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="pagina.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+
+</html>
