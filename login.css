@@ -78,24 +78,104 @@ label {
   font-weight: 600;
 }
 
-input[type="email"],
-input[type="password"],
-input[type="text"] {
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid var(--borde-input);
-  border-radius: 5px;
-  font-size: 15px;
-  transition: border-color 0.3s;
-}
-
-input[type="email"]:focus,
-input[type="password"]:focus,
-input[type="text"]:focus {
+/* Estilo para los inputs al estilo universe.io */
+.form-group input {
+  border: none;
   outline: none;
-  border-color: var(--naranja-primario);
+  border-radius: 15px;
+  padding: 1em;
+  background-color: #f0f0f0;
+  box-shadow: inset 2px 5px 10px rgba(0,0,0,0.1);
+  transition: all 300ms ease-in-out;
+  width: calc(100% - 2em);
 }
 
+.form-group input:focus {
+  background-color: white;
+  transform: scale(1.02);
+  box-shadow: 5px 5px 20px rgba(0,0,0,0.1),
+             -5px -5px 20px #ffffff;
+}
+
+/* Estilo del botón animado */
+.login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  position: relative;
+  padding: 0 20px;
+  font-size: 18px;
+  text-transform: uppercase;
+  border: 0;
+  box-shadow: hsl(142, 68%, 35%) 0px 7px 0px 0px;
+  background-color: var(--verde-primario);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: 31ms cubic-bezier(.5, .7, .4, 1);
+  width: 100%;
+  margin-top: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+.login-btn:before {
+  content: attr(alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  inset: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  letter-spacing: 1px;
+  opacity: 1;
+}
+
+.login-btn:active {
+  box-shadow: none;
+  transform: translateY(7px);
+  transition: 35ms cubic-bezier(.5, .7, .4, 1);
+}
+
+.login-btn:hover:before {
+  transition: all .0s;
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.login-btn i {
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-style: normal;
+  transition: all 2s ease;
+  transform: translateY(-20px);
+  opacity: 0;
+}
+
+.login-btn:hover i {
+  transition: all .2s ease;
+  transform: translateY(0px);
+  opacity: 1;
+}
+
+/* Ajustamos los delays para cada letra de "Iniciar Sesión" */
+.login-btn:hover i:nth-child(1) { transition-delay: 0.045s; }
+.login-btn:hover i:nth-child(2) { transition-delay: calc(0.045s * 2); }
+.login-btn:hover i:nth-child(3) { transition-delay: calc(0.045s * 3); }
+.login-btn:hover i:nth-child(4) { transition-delay: calc(0.045s * 4); }
+.login-btn:hover i:nth-child(5) { transition-delay: calc(0.045s * 5); }
+.login-btn:hover i:nth-child(6) { transition-delay: calc(0.045s * 6); }
+.login-btn:hover i:nth-child(7) { transition-delay: calc(0.045s * 7); }
+.login-btn:hover i:nth-child(8) { transition-delay: calc(0.045s * 8); }
+.login-btn:hover i:nth-child(9) { transition-delay: calc(0.045s * 9); }
+.login-btn:hover i:nth-child(10) { transition-delay: calc(0.045s * 10); }
+.login-btn:hover i:nth-child(11) { transition-delay: calc(0.045s * 11); }
+.login-btn:hover i:nth-child(12) { transition-delay: calc(0.045s * 12); }
+.login-btn:hover i:nth-child(13) { transition-delay: calc(0.045s * 13); }
 
 /* Estilos para el contenedor de contraseña */
 .password-container {
@@ -104,6 +184,11 @@ input[type="text"]:focus {
 
 .password-input-wrapper {
   position: relative;
+}
+
+.password-input-wrapper input {
+  width: calc(100% - 4em); /* Más espacio para el botón de toggle */
+  padding-right: 40px; /* Espacio para el ícono */
 }
 
 .password-toggle {
@@ -118,11 +203,23 @@ input[type="text"]:focus {
   opacity: 0.6;
   padding: 5px;
   font-size: 18px;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
+  z-index: 2;
 }
 
 .password-toggle:hover {
   opacity: 1;
+  color: var(--naranja-primario);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.password-toggle i {
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.password-toggle.active i {
+  transform: scale(1.1);
   color: var(--naranja-primario);
 }
 
@@ -141,34 +238,6 @@ input[type="text"]:focus {
 .forgot-password a:hover {
   color: var(--naranja-oscuro);
   text-decoration: underline;
-}
-
-.login-btn {
-  width: 100%;
-  padding: 14px;
-  background-color: var(--verde-primario);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-}
-
-.login-btn:hover {
-  background-color: var(--verde-oscuro);
-  transform: translateY(-2px);
-}
-
-.brand-content h2 {
-  font-size: 24px;
-  margin-bottom: 15px;
-}
-
-.brand-content p {
-  font-size: 15px;
-  line-height: 1.5;
 }
 
 /* Estilos para mensajes de error */
@@ -191,26 +260,61 @@ input[type="text"]:focus {
 }
 
 @keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
 
-  0%,
-  100% {
-    transform: translateX(0);
-  }
+/* ========= ESTILOS DE CARGA ========= */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
 
-  10%,
-  30%,
-  50%,
-  70%,
-  90% {
-    transform: translateX(-5px);
-  }
+.loading-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
 
-  20%,
-  40%,
-  60%,
-  80% {
-    transform: translateX(5px);
-  }
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--verde-primario);
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+.loader::after {
+  content: '';  
+  box-sizing: border-box;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-bottom-color: var(--naranja-primario);
+}
+
+@keyframes rotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* Responsive */

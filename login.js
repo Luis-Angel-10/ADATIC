@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function () {
   const loginForm = document.getElementById('loginForm');
   const emailInput = document.getElementById('email');
@@ -6,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const togglePassword = document.getElementById('togglePassword');
   const errorMessagesDiv = document.getElementById('errorMessages');
   const submitBtn = loginForm.querySelector('button[type="submit"]');
+  const loadingOverlay = document.getElementById('loadingOverlay');
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const rememberedEmail = localStorage.getItem('rememberedEmail');
@@ -14,13 +14,22 @@ document.addEventListener('DOMContentLoaded', function () {
     passwordInput.focus();
   }
 
-  // Mostrar y ocultar contraseña
+  // Mostrar y ocultar contraseña con animación
   togglePassword.addEventListener('click', function () {
     const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
     passwordInput.setAttribute('type', type);
     const icon = this.querySelector('i');
+
+    // Animación del icono
+    this.classList.toggle('active');
     icon.classList.toggle('fa-eye');
     icon.classList.toggle('fa-eye-slash');
+
+    // Efecto de rebote
+    icon.style.transform = 'scale(1.3)';
+    setTimeout(() => {
+      icon.style.transform = 'scale(1)';
+    }, 200);
   });
 
   loginForm.addEventListener('submit', async function (e) {
@@ -41,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
       saveUserSession({
         email: email,
         name: userData.nombre,
-        role: userData.rol,  
+        role: userData.rol,
         avatar: userData.avatarUrl,
         token: userData.token
       });
@@ -111,10 +120,21 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function setLoadingState(isLoading) {
-    submitBtn.disabled = isLoading;
-    submitBtn.innerHTML = isLoading
-      ? '<i class="fas fa-spinner fa-spin"></i> Iniciando sesión...'
-      : 'Iniciar Sesión';
+    try {
+      if (isLoading) {
+        console.log("Activando loading overlay");
+        loadingOverlay.classList.add('active');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Iniciando sesión...';
+      } else {
+        console.log("Desactivando loading overlay");
+        loadingOverlay.classList.remove('active');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Iniciar Sesión';
+      }
+    } catch (e) {
+      console.error("Error en setLoadingState:", e);
+    }
   }
 
   function handleLoginError(error) {
