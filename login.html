@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="login.css">
 </head>
+
 <body>
     <!-- Overlay de carga -->
     <div class="loading-overlay" id="loadingOverlay">
@@ -35,27 +37,30 @@
                     <a href="#" id="forgotPasswordLink">¿Olvidaste tu contraseña?</a>
                 </div>
                 <button type="submit" class="login-btn" alt="Iniciar Sesión">
-                  <i>I</i>
-                  <i>n</i>
-                  <i>i</i>
-                  <i>c</i>
-                  <i>i</i>
-                  <i>a</i>
-                  <i>r</i>
-                  <i>&nbsp;</i>
-                  <i>S</i>
-                  <i>e</i>
-                  <i>s</i>
-                  <i>i</i>
-                  <i>ó</i>
-                  <i>n</i>
+                    <i>I</i>
+                    <i>n</i>
+                    <i>i</i>
+                    <i>c</i>
+                    <i>i</i>
+                    <i>a</i>
+                    <i>r</i>
+                    <i>&nbsp;</i>
+                    <i>S</i>
+                    <i>e</i>
+                    <i>s</i>
+                    <i>i</i>
+                    <i>ó</i>
+                    <i>n</i>
                 </button>
                 <div id="errorMessages" class="error-messages"></div>
             </form>
         </div>
         <div class="login-brand">
             <div class="brand-content">
-                <img src="logo-tec.png" alt="Logo TEC Teziutlán" class="logo">
+                <div class="logo-container">
+                    <img src="logo-tec.png" alt="Logo TEC Teziutlán" class="logo logo-default">
+                    <img src="nomas.jpg" alt="Logo alternativo TEC Teziutlán" class="logo logo-hover">
+                </div>
                 <h2>TEC de Teziutlán</h2>
                 <p>Bienvenido al sistema de acceso del Tecnológico de Teziutlán.</p>
             </div>
@@ -64,4 +69,5 @@
     <script src="apiController.js"></script>
     <script src="login.js"></script>
 </body>
+
 </html>

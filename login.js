@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+  let originalButtonContent = null;
   const loginForm = document.getElementById('loginForm');
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
@@ -123,6 +124,9 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
       if (isLoading) {
         console.log("Activando loading overlay");
+        if (!originalButtonContent) {
+          originalButtonContent = submitBtn.innerHTML;
+        }
         loadingOverlay.classList.add('active');
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Iniciando sesión...';
@@ -130,7 +134,22 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("Desactivando loading overlay");
         loadingOverlay.classList.remove('active');
         submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Iniciar Sesión';
+        submitBtn.innerHTML = originalButtonContent || `
+                <i>I</i>
+                <i>n</i>
+                <i>i</i>
+                <i>c</i>
+                <i>i</i>
+                <i>a</i>
+                <i>r</i>
+                <i>&nbsp;</i>
+                <i>S</i>
+                <i>e</i>
+                <i>s</i>
+                <i>i</i>
+                <i>ó</i>
+                <i>n</i>
+            `;
       }
     } catch (e) {
       console.error("Error en setLoadingState:", e);
